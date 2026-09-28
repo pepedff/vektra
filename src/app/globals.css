@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-bg: #0b0e14;
+  --color-bg-2: #10151f;
+  --color-card: #151b26;
+  --color-card-2: #1a2130;
+  /* NOVO: fundo dos campos (era #0e131c escrito na mão nos componentes) */
+  --color-field: #0e131c;
+  --color-line: rgb(255 255 255 / 0.07);
+  --color-line-strong: rgb(255 255 255 / 0.12);
+  --color-fg: #f5f7fb;
+  --color-muted: #8b94a7;
+  --color-subtle: #5d6678;
+
+  --color-blue: #00a8ff;
+  --color-cyan: #00d5ff;
+  --color-purple: #7c3aed;
+  --color-violet: #a78bfa;
+  --color-pink: #ec4899;
+  --color-orange: #ff7518;
+  --color-green: #00d49a;
+  --color-red: #ff4d6d;
+  --color-yellow: #ffb020;
+
+  --radius-xl2: 1.125rem;
+  --radius-panel: 1.25rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-gradient-pan: gradient-pan 8s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
+  /* NOVO: permitem usar animate-bell e animate-toast-progress como classe */
+  --animate-bell: bell 0.9s ease-in-out;
+  --animate-toast-progress: toast-progress linear forwards;
+
+  @keyframes gradient-pan {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* NOVO: celular não aumenta a fonte sozinho ao girar a tela */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* NOVO: tira o "flash" azul/cinza ao tocar em botões no celular */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  /* NOVO: títulos quebram em linhas equilibradas e parágrafos evitam palavra sozinha na última linha */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgb(0 168 255 / 0.32);
+    color: #fff;
+  }
+
+  /* CORRIGIDO: antes tinha border-radius: 10px aqui, que mudava o formato
+     de botões redondos e cartões quando recebiam foco pelo teclado.
+     O contorno já acompanha o arredondamento de cada elemento sozinho. */
+  :focus-visible {
+    outline: 2px solid rgb(0 213 255 / 0.7);
+    outline-offset: 2px;
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-cyan);
+  }
+
+  /* NOVO: o autopreencher do Chrome pintava os campos de branco/amarelo
+     (ex.: e-mail e senha no login). Agora ficam no tema escuro. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-fg);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-field) inset;
+    caret-color: var(--color-cyan);
+    transition: background-color 9999s ease-out 0s;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.12) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(255 255 255 / 0.1);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(255 255 255 / 0.18);
+  }
+
+  a {
+    text-underline-offset: 3px;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .text-gradient-flow {
+    background-image: linear-gradient(
+      90deg,
+      #ff7518 0%,
+      #ff3d3d 20%,
+      #ec4899 40%,
+      #7c3aed 65%,
+      #00a8ff 85%,
+      #ff7518 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: var(--animate-gradient-pan);
+  }
+
+  .bg-brand-flow {
+    background-image: linear-gradient(90deg, #ff7518, #ec4899, #7c3aed, #00a8ff, #ff7518);
+    background-size: 240% 100%;
+    animation: var(--animate-gradient-pan);
+  }
+
+  .bg-action {
+    background-image: linear-gradient(100deg, #0077ff 0%, #00a8ff 45%, #00d5ff 100%);
+  }
+
+  .surface {
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+  }
+
+  .glass {
+    background: rgb(16 21 31 / 0.72);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  /* 1px gradient ring that respects border-radius via mask */
+  .ring-gradient {
+    position: relative;
+  }
+  .ring-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(
+      --ring,
+      linear-gradient(135deg, rgb(0 213 255 / 0.55), rgb(124 58 237 / 0.35) 45%, rgb(236 72 153 / 0.4))
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    /* NOVO: versão sem prefixo, para o Firefox recortar a borda certinho */
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .grid-backdrop {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 80%);
+  }
+
+  /* Lembrete: o elemento com .noise precisa ter position relative/absolute */
+  .noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+}
+
+@keyframes bell {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  15% {
+    transform: rotate(14deg);
+  }
+  30% {
+    transform: rotate(-12deg);
+  }
+  45% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* Lenis: CSS recomendado pela própria biblioteca */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+/* NOVO: áreas com data-lenis-prevent (chat, menu) não "vazam" a rolagem para a página */
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+/* NOVO: quando o Lenis é pausado (ex.: modal aberto), a página realmente trava */
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+/* NOVO: evita que iframes (vídeos, embeds) travem a rolagem suave */
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
